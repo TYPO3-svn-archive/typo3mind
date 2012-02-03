@@ -1,0 +1,55 @@
+<f:be.container pageTitle="TYPO3Mind Dispatcher" enableJumpToUrl="false" enableClickMenu="false" loadPrototype="false" loadScriptaculous="false" loadExtJs="false" extJsAdapter="jQuery" enableExtJsDebug="false" addCssFile="{f:uri.resource(path:'styles/backend.css')}" addJsFile="{f:uri.resource(path:'scripts/flattr.js')}">
+<script type="text/javascript" src="{f:uri.resource(path:'scripts/jquery.min.js')}"></script>
+<script type="text/javascript">jQuery.noConflict(); </script>
+<link rel="stylesheet" media="screen" type="text/css" href="{f:uri.resource(path:'colorpicker/css/colorpicker.css')}" />
+
+	<div class="typo3-fullDoc">
+		<div id="typo3-docheader">
+			<div id="typo3-docheader-row1">
+				<div class="buttonsleft">
+
+				</div>
+				<div class="buttonsright">
+					<f:be.buttons.shortcut />
+				</div>
+			</div>
+			<div id="typo3-docheader-row2">
+				<div class="docheader-row2-left">
+					<f:be.buttons.csh />
+					<f:be.menus.actionMenu>
+						<f:be.menus.actionMenuItem label="Overview" controller="" action="list" />
+						<f:be.menus.actionMenuItem label="Create new T3mind" action="new" controller="T3mind" />
+					</f:be.menus.actionMenu>
+				</div>
+				<div class="docheader-row2-right">
+					<f:be.pagePath />
+					<f:be.pageInfo />
+				</div>
+			</div>
+
+		</div>
+		<div id="typo3-docbody">
+			<div id="typo3-inner-docbody">
+				
+					<f:flashMessages renderMode="div" />
+					<f:render section="content" />
+				 
+			</div>
+			<div class="clear"></div>
+		<div class="footer">
+			<div class="github">
+				<a target="_blank" href="http://forge.typo3.org/projects/extension-typo3mind/">TYPO3Mind on forge.typo3.org</a>
+			</div>
+			
+			<!-- div class="flattr floatLeft">
+				<a class="FlattrButton" style="display:none;" href="https://github.com/SchumacherFM/TYPO3Mind"></a><noscript><a href="http://flattr.com/thing/450156/TYPO3Mind" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+			</div -->
+			
+			<div class="clear"></div>
+		</div>
+			
+		</div>
+	</div>
+<script type="text/javascript" src="{f:uri.resource(path:'colorpicker/js/colorpicker.js')}"></script>
+<script type="text/javascript" src="{f:uri.resource(path:'scripts/main.js')}"></script>
+</f:be.container>

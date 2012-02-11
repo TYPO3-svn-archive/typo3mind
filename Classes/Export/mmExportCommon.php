@@ -411,6 +411,18 @@ class Tx_Typo3mind_Export_mmExportCommon extends Tx_Typo3mind_Export_mmExportFre
 
 	}/*</getDesignEdgeWidth>*/
 
+	private function _getRssTitle($rssContent){
+		return isset($rssContent->channel->title) ? $rssContent->channel->title : $rssContent->title;
+	}
+	private function _getRssLink($rssContent){
+		if( isset($rssContent->channel->link) ) {
+			return $rssContent->channel->link;
+		} else{
+			$attr = (array)$rssContent->link->attributes();
+			return $attr['@attributes']['href'];
+		}
+	}
+	
 	/**
 	 * if defined in the settings TS it returned the edge width
 	 *
@@ -424,25 +436,38 @@ class Tx_Typo3mind_Export_mmExportCommon extends Tx_Typo3mind_Export_mmExportFre
 		}
 
 		foreach($this->settings['TYPO3SecurityRssFeeds'] as $index=>$feedURL){
-
+// http://www.sebastian-heinisch.de/php-rss-reader-klasse/2008-03-11/
 			$rssContent = simplexml_load_string($this->getURLcache($feedURL));
 			if( $rssContent ){
 
+//				$isRss20 = ( isset($rssContent->channel->title) && isset($rssContent->channel->item) ) ? true : false;
+			
 				$rssHeadNode = $this->addNode($xmlNode,array(
 					'FOLDED'=>'true',
-					'TEXT'=>htmlspecialchars($rssContent->channel->title),
-					'LINK'=>$rssContent->channel->link
+					'TEXT'=>htmlspecialchars( $this->_getRssTitle($rssContent) ),
+					'LINK'=>$this->_getRssLink($rssContent)
 				));
-				foreach($rssContent->channel->item as $index=>$item){
+echo '<pre>';
+var_dump( $this->_getRssLink($rssContent) );
+var_dump($rssContent);
+die('</pre>');		
+				/* RSS 2.0 */
+				if( isset($rssContent->channel) && is_object($rssContent->channel) ){
+					foreach($rssContent->channel->item as $index=>$item){
 
-					$htmlContent = array();
-					$htmlContent[] = '<p>'.htmlspecialchars($item->author).'</p>';
-					$htmlContent[] = '<p>'.htmlspecialchars($item->pubDate).'</p>';
-					$htmlContent[] = '<p>'.$item->description.'</p>';
+						$htmlContent = array();
+						$htmlContent[] = '<p>'.htmlspecialchars($item->author).'</p>';
+						$htmlContent[] = '<p>'.htmlspecialchars($item->pubDate).'</p>';
+						$htmlContent[] = '<p>'.$item->description.'</p>';
 
-					$rssItemNode = $this->addRichContentNote($rssHeadNode,array('TEXT'=>htmlspecialchars($item->title),'LINK'=>$item->link),implode('',$htmlContent));
+						$rssItemNode = $this->addRichContentNote($rssHeadNode,array('TEXT'=>htmlspecialchars($item->title),'LINK'=>$item->link),implode('',$htmlContent));
 
-				}/*endforeach*/
+					}/*endforeach*/
+				}/*endif rss 2.0*/
+				elseif( isset($rssContent->entry) ){
+				
+				}/*endif rss atom*/
+				
 			}/*endif $rssContent*/
 		}/*endforeach*/
 		return true;

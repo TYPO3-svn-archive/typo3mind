@@ -170,6 +170,7 @@ class Tx_Typo3mind_Export_mmExportCommon extends Tx_Typo3mind_Export_mmExportFre
 	public function getFEHttpHost( $page_Uid ) {
 		if( isset($this->sysDomains[$page_Uid]) ){
 			$httpWhat = t3lib_div::getIndpEnv('TYPO3_SSL') ? 'https' : 'http';
+			/* how can you be sure to know that this FE hosts supports SSL when you generate the .mm file using a different BE host with SSL? */
 			$this->httpHosts['frontend'] = $httpWhat.'://'.$this->sysDomains[$page_Uid].'/';
 		}
 		return $this->httpHosts['frontend'];
@@ -422,7 +423,7 @@ class Tx_Typo3mind_Export_mmExportCommon extends Tx_Typo3mind_Export_mmExportFre
 			return $attr['@attributes']['href'];
 		}
 	}
-	
+
 	/**
 	 * if defined in the settings TS it returned the edge width
 	 *
@@ -436,21 +437,16 @@ class Tx_Typo3mind_Export_mmExportCommon extends Tx_Typo3mind_Export_mmExportFre
 		}
 
 		foreach($this->settings['TYPO3SecurityRssFeeds'] as $index=>$feedURL){
-// http://www.sebastian-heinisch.de/php-rss-reader-klasse/2008-03-11/
+
 			$rssContent = simplexml_load_string($this->getURLcache($feedURL));
 			if( $rssContent ){
 
-//				$isRss20 = ( isset($rssContent->channel->title) && isset($rssContent->channel->item) ) ? true : false;
-			
 				$rssHeadNode = $this->addNode($xmlNode,array(
 					'FOLDED'=>'true',
 					'TEXT'=>htmlspecialchars( $this->_getRssTitle($rssContent) ),
 					'LINK'=>$this->_getRssLink($rssContent)
 				));
-echo '<pre>';
-var_dump( $this->_getRssLink($rssContent) );
-var_dump($rssContent);
-die('</pre>');		
+
 				/* RSS 2.0 */
 				if( isset($rssContent->channel) && is_object($rssContent->channel) ){
 					foreach($rssContent->channel->item as $index=>$item){
@@ -464,10 +460,12 @@ die('</pre>');
 
 					}/*endforeach*/
 				}/*endif rss 2.0*/
-				elseif( isset($rssContent->entry) ){
-				
+				else {
+					$this->addNode($xmlNode,array(
+						'TEXT'=>'RSS Feed not readable',
+					));
 				}/*endif rss atom*/
-				
+
 			}/*endif $rssContent*/
 		}/*endforeach*/
 		return true;

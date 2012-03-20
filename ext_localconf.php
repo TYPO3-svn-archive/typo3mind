@@ -1,6 +1,6 @@
 <?php
 /***************************************************************
- *  Copyright notice
+*  Copyright notice
 *
 *  (c) 2011 Cyrill Schumacher <Cyrill@Schumacher.fm>
 *
@@ -27,9 +27,9 @@
  *
  *
  * @package typo3mind
-* @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
-*
+ * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
 */
+
 if (!defined ('TYPO3_MODE')){ 	die ('Access denied.');	}
 /*
 still not supported by freemind to include files from URLs ... but with a tricky of adjusting the .bat startup file and using wget ...

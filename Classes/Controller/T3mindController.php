@@ -50,22 +50,9 @@ class Tx_Typo3mind_Controller_T3mindController extends Tx_Extbase_MVC_Controller
 	}
 
 	/**
-	 * export object nach domain verschieben und die das wort export aus dem namen entfernen
-	 * dafuer FM einbauen, to show that the export is for freemind
-	 *
-	 * @var Tx_Typo3mind_Domain_Export_fm
+	 * @var Tx_Typo3mind_Domain_Export_mm $t3mmExport
 	 */
-	protected $t3FmExport;
-
-	/**
-	 * injectT3mindRepository
-	 *
-	 * @param Tx_Typo3mind_Domain_Export_fm $t3Export
-	 * @return void
-	 */
-	public function injectt3FmExport(Tx_Typo3mind_Domain_Export_fm $t3FmExport) {
-		$this->t3FmExport = $t3FmExport;
-	}
+	protected $t3mmExport;
 
 	/**
 	 * extConfSettings from the localconf.php
@@ -114,6 +101,7 @@ class Tx_Typo3mind_Controller_T3mindController extends Tx_Extbase_MVC_Controller
         $this->extConfSettings = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['typo3mind']);
 		$this->tt = t3lib_div::makeInstance('t3lib_timetrack');
 		$this->tt->start();
+		$this->t3mmExport = new Tx_Typo3mind_Domain_Export_mmMain();
 
 		if( !isset($this->extConfSettings['apikey']) || trim($this->extConfSettings['apikey'])=='' ){
 			throw new Exception('Please set an API Key in the Extension Manager. 1336458461');
@@ -159,7 +147,11 @@ class Tx_Typo3mind_Controller_T3mindController extends Tx_Extbase_MVC_Controller
 		libxml_use_internal_errors(true);
 		$this->settings['pageUid'] = $this->pageUid;
 		/*TODO export via ajax ...*/
-		$expObj = new Tx_Typo3mind_Export_mmExport($this->settings,$this->t3MindRepository);
+		// $expObj = new Tx_Typo3mind_Export_mmExport($this->settings,$this->t3MindRepository);
+
+		implement these functions into the class
+		$this->t3mmExport->setSettings($this->settings);
+		$this->t3mmExport->sett3MindRepository($this->t3MindRepository);
 		$mmFile = $expObj->getContent();
 
 		$this->view->assign('downloadURL', $mmFile['file']);

@@ -24,17 +24,15 @@
  ***************************************************************/
 
 /**
- * 
- *
  * @package typo3mind
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  *
  */
-interface Tx_Typo3mind_Export_mmExportInterface {
-	
+interface Tx_Typo3mind_Domain_Export_mmInterface {
+
 	/**
 	 * gets the whole content ...
-	 * 
+	 *
 	 * @param none
 	 */
 	public function getContent();

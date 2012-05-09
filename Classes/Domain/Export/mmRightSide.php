@@ -31,7 +31,7 @@
  *
  */
 
-class Tx_Typo3mind_Export_mmExportRightSide extends Tx_Typo3mind_Export_mmExportCommon {
+class Tx_Typo3mind_Domain_Export_mmRightSide extends Tx_Typo3mind_Domain_Export_mmCommon {
 
 	/**
 	 * @var SimpleXMLElement
@@ -82,7 +82,7 @@ class Tx_Typo3mind_Export_mmExportRightSide extends Tx_Typo3mind_Export_mmExport
 
 		$this->RGBinterpolate = t3lib_div::makeInstance('Tx_Typo3mind_Utility_RGBinterpolate');
 
-
+		// @todo use the inject method
 		$this->tree = t3lib_div::makeInstance('Tx_Typo3mind_Utility_PageTree');
 		$this->tree->init('');
 		$this->tree->getTree(0, 999, '');

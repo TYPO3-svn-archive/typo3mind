@@ -24,13 +24,12 @@
  ***************************************************************/
 
 /**
- *
- *
  * @package typo3mind
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  *
  */
-class Tx_Typo3mind_Export_mmExportCommon extends Tx_Typo3mind_Export_mmExportFreeMind /* extends SimpleXMLElement */ {
+class Tx_Typo3mind_Domain_Export_mmCommon extends Tx_Typo3mind_Domain_Export_Formats_Freemind /* extends SimpleXMLElement */ {
+	/* is there a way to dynamically extend from different classes? i think not ... :-( */
 
 	/**
 	 * pageUid of the current page

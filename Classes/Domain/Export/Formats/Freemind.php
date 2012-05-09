@@ -24,13 +24,12 @@
  ***************************************************************/
 
 /**
- *
- *
  * @package typo3mind
+ * @subpackage formats
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  *
  */
-class Tx_Typo3mind_Export_mmExportFreeMind /* extends SimpleXMLElement */ {
+class Tx_Typo3mind_Domain_Export_Formats_Freemind implements Tx_Typo3mind_Domain_Export_Formats_FormatInterface /* extends SimpleXMLElement */ {
     /**
      * The root root root node of the xml file
      *
@@ -49,7 +48,7 @@ class Tx_Typo3mind_Export_mmExportFreeMind /* extends SimpleXMLElement */ {
      * @param    none
      * @return    SimpleXMLElement
      */
-    protected function getMap() {
+    public function getMap() {
         $this->mapXmlRoot = new SimpleXMLElement('<map></map>', LIBXML_NOXMLDECL | LIBXML_PARSEHUGE);
         $this->mapXmlRoot->addAttribute('version',$this->mmVersion);
 
@@ -105,7 +104,7 @@ class Tx_Typo3mind_Export_mmExportFreeMind /* extends SimpleXMLElement */ {
      * @param    array $attributes
      * @return    nothing
      */
-    protected function addAttributes(SimpleXMLElement $xmlNode,$attributes) {
+    public function addAttributes(SimpleXMLElement $xmlNode,$attributes) {
         foreach($attributes as $k=>$v){
             if( $v <> '' ){
                 $xmlNode->addAttribute($k,$this->xmlentities($v) );

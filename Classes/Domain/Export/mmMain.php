@@ -1,5 +1,6 @@
 <?php
-/***************************************************************
+
+/* * *************************************************************
  *  Copyright notice
  *
  *  (c) 2011 Cyrill Schumacher <Cyrill@Schumacher.fm>
@@ -21,7 +22,7 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * ************************************************************* */
 
 /**
  *
@@ -30,7 +31,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  *
  */
-class Tx_Typo3mind_Export_mmExport extends Tx_Typo3mind_Export_mmExportCommon implements Tx_Typo3mind_Export_mmExportInterface {
+class Tx_Typo3mind_Domain_Export_mmMain extends Tx_Typo3mind_Domain_Export_mmCommon implements Tx_Typo3mind_Domain_Export_mmInterface {
 
 	/**
 	 * Constructor
@@ -39,8 +40,8 @@ class Tx_Typo3mind_Export_mmExport extends Tx_Typo3mind_Export_mmExportCommon im
 	 * @param Tx_Typo3mind_Domain_Repository_T3mindRepository $t3MindRepository
 	 * @return void
 	 */
-	public function __construct(array $settings,Tx_Typo3mind_Domain_Repository_T3mindRepository $t3MindRepository) {
-		parent::__construct($settings,$t3MindRepository);
+	public function __construct(array $settings, Tx_Typo3mind_Domain_Repository_T3mindRepository $t3MindRepository) {
+		parent::__construct($settings, $t3MindRepository);
 	}
 
 	/**
@@ -52,24 +53,22 @@ class Tx_Typo3mind_Export_mmExport extends Tx_Typo3mind_Export_mmExportCommon im
 
 		$rootNode = $this->getMap();
 
-		$mmExportLeftSide = t3lib_div::makeInstance('Tx_Typo3mind_Export_mmExportLeftSide',$this->settings,$this->t3MindRepository);
+		$mmExportLeftSide = t3lib_div::makeInstance('Tx_Typo3mind_Domain_Export_mmLeftSide', $this->settings, $this->t3MindRepository);
 		$mmExportLeftSide->getSecurityNode($rootNode);
 		$mmExportLeftSide->getTYPONode($rootNode);
-		$mmExportLeftSide->getExtensionNode($rootNode); 
+		$mmExportLeftSide->getExtensionNode($rootNode);
 		$mmExportLeftSide->getDatabaseNode($rootNode);
-		$mmExportLeftSide->getServerNode($rootNode); 
+		$mmExportLeftSide->getServerNode($rootNode);
 
 
-		$mmExportRightSide = t3lib_div::makeInstance('Tx_Typo3mind_Export_mmExportRightSide',$this->settings,$this->t3MindRepository);
+		$mmExportRightSide = t3lib_div::makeInstance('Tx_Typo3mind_Domain_Export_mmRightSide', $this->settings, $this->t3MindRepository);
 		$mmExportRightSide->getSysLanguages($rootNode);
 		$mmExportRightSide->getSysDomains($rootNode);
-		$mmExportRightSide->sett3mind( $this->t3MindRepository->findAll() );
+		$mmExportRightSide->sett3mind($this->t3MindRepository->findAll());
 		$mmExportRightSide->getTree($rootNode);
 
 		return $this->finalOutputFile($this->mapXmlRoot);
+	}
 
-	} /* end fnc getContent */
-
-
-
+/* end fnc getContent */
 }

@@ -30,7 +30,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  *
  */
-class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportCommon {
+class Tx_Typo3mind_Domain_Export_mmLeftSide extends Tx_Typo3mind_Domain_Export_mmCommon {
 
 
 	/**
@@ -62,18 +62,18 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 	 * @var t3lib_loadModules
 	 */
 	private $_loadModules;
-	
+
 	/**
 	 * @var t3lib_TCEforms
 	 */
 	private $_TCEforms;
-	
+
 	/**
 	 * Just to set an flag IF an extension update is available
 	 * @var array
 	 */
 	private $_isExtUpdateAvailable = array();
-	
+
 	/**
 	 * __constructor
 	 *
@@ -83,9 +83,9 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 	 */
 	public function __construct(array $settings,Tx_Typo3mind_Domain_Repository_T3mindRepository $t3MindRepository) {
 		parent::__construct($settings,$t3MindRepository);
-		
+
 			$this->_loadModules = t3lib_div::makeInstance('t3lib_loadModules');
-			$this->_loadModules->load($GLOBALS['TBE_MODULES']);			
+			$this->_loadModules->load($GLOBALS['TBE_MODULES']);
 			$this->_TCEforms = t3lib_div::makeInstance('t3lib_TCEforms');
 
 		$this->categories = array(
@@ -116,7 +116,7 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 
 	}
 
-	
+
 	/**
 	 * gets some T3 specific informations about fileadmin and uploads folder ...
 	 *
@@ -579,7 +579,7 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 
 				}else{
 					$htmlContent = array();
-					$attr = array(		
+					$attr = array(
 						'TEXT'=>'['.$confName.'] = '.( !is_string($v) ? 'no-string given' : htmlspecialchars($v) ),
 					);
 
@@ -684,7 +684,7 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 
 	}/*endmethod*/
 
-	
+
 	/**
 	 * gets secutiry node
 	 * http://www.iconarchive.com/show/refresh-cl-icons-by-tpdkdesign.net/System-Security-Warning-icon.html
@@ -693,7 +693,7 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 	 * @return	SimpleXMLElement
 	 */
 	public function getSecurityNode(SimpleXMLElement $xmlNode) {
-	
+
 		$secMainNode = $this->addImgNode($xmlNode,array(
 			'POSITION'=>'left',
 			'FOLDED'=>'true',
@@ -702,15 +702,15 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 
 		$this->addNode($secMainNode,array('TEXT'=>'TYPO3 Security Guide ','LINK'=>$this->settings['TYPO3SecurityGuideURL']));
 
-		
+
 		$this->RssFeeds2Node($secMainNode);
-	
-	
+
+
 		$this->addNode($secMainNode,array('TEXT'=>'more to follow','LINK'=>'https://github.com/SchumacherFM/TYPO3Mind/issues/12'));
-	
+
 	}/*</getSecurityNode>*/
-	
-	
+
+
 	/**
 	 * gets some server informations
 	 *
@@ -826,7 +826,7 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 		return $MainNode;
 	}/*</getDatabaseNode>*/
 
-	
+
 	private function _getExtensionNodeIcon($extKey,$extType){
 
 			switch($extType){
@@ -846,10 +846,10 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 
 			// ext icon
 			$extIcon = $preURI . $extKey . '/ext_icon.gif';
-			
+
 		return array('addTERLink'=>$addTERLink,'extIcon'=>$extIcon);
 	}/*</_ExtensionNodeIcon>*/
-	
+
 	/**
 	 * gets the extension nodes
 	 *
@@ -873,17 +873,17 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 			'TEXT'=>$this->translate('tree.extensions.selectable'),
 			'FOLDED'=>'true',
 		));
-		
-		
+
+
 		foreach( $TCA['tt_content']['columns']['list_type']['config']['items'] as $ei=>$extA ){
 			$extA[0] = $GLOBALS['LANG']->sL($extA[0]);
 			if( !empty($extA[0]) ){
-			
+
 				$extName = array();
 				preg_match('~/([\w]+)/ext_icon\.gif~i',$extA[2],$extName);
 
-				$extKey = isset($extName[1]) ? $extName[1] : '';				
-				
+				$extKey = isset($extName[1]) ? $extName[1] : '';
+
 				$this->addImgNode($selectableExtensions,array(
 					'TEXT'=> '('.$extA[1].') '.$extA[0],
 					'LINK'=> '#LSext'.$extKey,
@@ -925,25 +925,25 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 						);
 						$this->_isExtUpdateAvailable[$extName] = 1;
 						$attr = array('ID'=>'LSupdate'.$extName,'LINK'=>'#LSext'.$extName);
-						
+
 						$extRCNode = $this->addRichContentNote($updateExtensions,$attr,$htmlContent,array(),array(), 'BOTH' );
 
 						$this->addArrowlink($extRCNode,array('DESTINATION'=>'LSext'.$extName));
-						
+
 			}/*endforeach*/
 		/*</check for extension updates!>*/
 
-		
+
 		$installedExt = $extensionManager->getInstalledExtensions();
 
-	//	echo '<pre>'; var_dump($installedExt[0]); die('</pre>');		
+	//	echo '<pre>'; var_dump($installedExt[0]); die('</pre>');
 
 		/*<Simple list all extensions and link them>*/
 		$ListAllExtensionsNode = $this->addNode($ChildFirst_Extensions,array(
 			'TEXT'=>$this->translate('tree.extensions.allext').' ('.count($installedExt[0]).')',
 			'FOLDED'=>'true',
 		));
-		
+
 		foreach($installedExt[0] as $extKey=>$extArray ){
 
 			// ext icon
@@ -959,8 +959,8 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 			$this->addIcon($extNode,$icon);
 		}
 		/*</Simple list all extensions and link them>*/
-		
-		
+
+
 		/* extension by modul state */
 
 		/* rebuilding the array by cat->state->name */
@@ -1030,7 +1030,7 @@ class Tx_Typo3mind_Export_mmExportLeftSide extends Tx_Typo3mind_Export_mmExportC
 						$this->addNode($extNode, array(
 							'TEXT'=>'Key: '.$extKey,
 						) );
-						
+
 						// link to TER
 						if( $ico['addTERLink'] == 1 ){
 							$this->addNode($extNode, array(

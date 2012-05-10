@@ -25,13 +25,12 @@
  * ************************************************************* */
 
 /**
- *
- *
  * @package typo3mind
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  *
  */
 class Tx_Typo3mind_Domain_Export_mmMain extends Tx_Typo3mind_Domain_Export_mmCommon implements Tx_Typo3mind_Domain_Export_mmInterface {
+	/* interface is nice here, but not really needed ... */
 
 	/**
 	 * Constructor
@@ -68,7 +67,5 @@ class Tx_Typo3mind_Domain_Export_mmMain extends Tx_Typo3mind_Domain_Export_mmCom
 		$mmExportRightSide->getTree($rootNode);
 
 		return $this->finalOutputFile($this->mapXmlRoot);
-	}
-
-/* end fnc getContent */
+	} /* end fnc getContent */
 }

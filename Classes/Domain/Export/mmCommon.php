@@ -87,11 +87,17 @@ class Tx_Typo3mind_Domain_Export_mmCommon extends Tx_Typo3mind_Domain_Export_For
 	*/
 	public $cruser_id;
 
-	/*
+	/**
 	 * contains all entries from a table in the database
 	 * @var array
 	 **/
 	protected $dbTables;
+
+	/**
+	 *
+	 * @var Tx_Typo3mind_Domain_Export_Formats_[The Format]
+	 */
+	protected $mmFormat;
 
 	/**
 	 * Constructor
@@ -108,6 +114,14 @@ class Tx_Typo3mind_Domain_Export_mmCommon extends Tx_Typo3mind_Domain_Export_For
 		$this->initSysLanguages();
 		$this->setHttpHosts();
 		$this->setCruserId();
+
+		$tsFormat = !empty($this->settings['exportFormatClass']) ? $this->settings['exportFormatClass'] : 'Freemind';
+		$makeInstance = 'Tx_Typo3mind_Domain_Export_Formats_'.$tsFormat;
+
+		if( !class_exists($makeInstance) ){
+			throw new Exception('Couldn\'t find class '.$makeInstance.'. Maybe you have a miss configuration in your TypoScript Setting exportFormatClass / Error Number: 1336631312');
+		}
+		$this->mmFormat = t3lib_div::makeInstance($makeInstance);
 	}
 	/**
 	 * sets the CruserId
@@ -316,15 +330,24 @@ class Tx_Typo3mind_Domain_Export_mmCommon extends Tx_Typo3mind_Domain_Export_For
 	 * @return integer bytes
 	 */
 	protected function formatBytes($bytes){
-		$return = '';
-		if( $bytes < 1024 ){ $return = sprintf('%.2f',$bytes).'  B'; }
-		elseif( $bytes < 1024*1000 ){ $return = sprintf('%.2f',$bytes/1024).' KB'; }
-		elseif( $bytes < 1024*1000*1000 ){ $return = sprintf('%.2f',$bytes/1024/1024).' MB'; }
-		elseif( $bytes < 1024*1000*1000*1000 ){ $return = sprintf('%.2f',$bytes/1024/1024/1024).' GB'; }
-		elseif( $bytes < 1024*1000*1000*1000*1000 ){ $return = sprintf('%.2f',$bytes/1024/1024/1024/1024).' TB'; }
+		$bytes = (int)$bytes;
 
+		if ($bytes == 0) {
+			 $return = 'n/a';
+		}else{
+
+			$sizes = array('  B', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB');
+			$return = '';
+			$return = ( round($bytes/pow(1024, ($i = floor(log($bytes, 1024)))), 2) . $sizes[$i]);
+		}
+//		if( $bytes < 1024 ){ $return = sprintf('%.2f',$bytes).'  B'; }
+//		elseif( $bytes < 1024*1000 ){ $return = sprintf('%.2f',$bytes/1024).' KB'; }
+//		elseif( $bytes < 1024*1000*1000 ){ $return = sprintf('%.2f',$bytes/1024/1024).' MB'; }
+//		elseif( $bytes < 1024*1000*1000*1000 ){ $return = sprintf('%.2f',$bytes/1024/1024/1024).' GB'; }
+//		elseif( $bytes < 1024*1000*1000*1000*1000 ){ $return = sprintf('%.2f',$bytes/1024/1024/1024/1024).' TB'; }
 		return str_pad($return,15,' ', STR_PAD_LEFT);
 	}
+
 	/**
 	 * gets all recurSive Directory size / func could be improved with scandir()
 	 *
